@@ -7,7 +7,7 @@ export default function Page(): JSX.Element {
   return (
     <main className="h-screen flex items-center ">
       <div className="text-center w-[20%] mx-auto flex flex-col gap-[50px]">
-        <h1 className="text-4xl text-blue-500 font-semibold">Hello</h1>
+        <h1 className="text-4xl text-blue-500 font-semibold">CashSplash</h1>
         {session?.data?.user?.email && (
           <h2>
             <span className="text-lg font-bold">Phone No - </span>
