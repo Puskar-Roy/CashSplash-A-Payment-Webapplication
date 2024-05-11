@@ -1,11 +1,16 @@
-"use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { MdOutlineMenu, MdOutlineClose } from "react-icons/md";
-import { signIn, signOut, useSession } from "next-auth/react";
 
-const Navbar = () => {
+
+interface AppbarProps {
+  name?: string | null;
+  onSignin: any;
+  onSignout: any;
+  sessionStatus?: string | null;
+}
+
+const Navbar = ({ name, onSignin, onSignout, sessionStatus }: AppbarProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
-    const session = useSession();
   const changeToggle = () => {
     setToggle(!toggle);
   };
@@ -30,17 +35,17 @@ const Navbar = () => {
           <li className="text-lg font-medium cursor-pointer hover:text-blue-500">
             Contact
           </li>
-          {session.status === "unauthenticated" ? (
+          {sessionStatus === "unauthenticated" ? (
             <li
               className="text-base font-medium cursor-pointer px-3 py-2 bg-blue-500 rounded-lg text-white hover:bg-blue-400"
-              onClick={() => signIn()}
+              onClick={() => onSignin()}
             >
               Login
             </li>
           ) : (
             <li
               className="text-base font-medium cursor-pointer px-3 py-2 bg-blue-500 rounded-lg text-white hover:bg-blue-400"
-              onClick={() => signOut()}
+              onClick={() => onSignout()}
             >
               Logout
             </li>
@@ -63,17 +68,17 @@ const Navbar = () => {
         <li className="text-lg font-medium cursor-pointer hover:text-blue-500">
           Contact
         </li>
-        {session.status === "unauthenticated" ? (
+        {sessionStatus === "unauthenticated" ? (
           <li
             className="text-lg font-medium cursor-pointer p-3 bg-blue-500 rounded-xl text-white hover:bg-blue-400"
-            onClick={() => signIn()}
+            onClick={() => onSignin()}
           >
             Login
           </li>
         ) : (
           <li
             className="text-lg font-medium cursor-pointer p-3 bg-blue-500 rounded-xl text-white hover:bg-blue-400"
-            onClick={() => signOut()}
+            onClick={() => onSignout()}
           >
             Logout
           </li>
