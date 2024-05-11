@@ -9,7 +9,7 @@ interface AppbarProps {
   sessionStatus?: string | null;
 }
 
-const Navbar = ({ name, onSignin, onSignout, sessionStatus }: AppbarProps) => {
+const BaseNavbar = ({ name, onSignin, onSignout, sessionStatus }: AppbarProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const changeToggle = () => {
     setToggle(!toggle);
@@ -88,4 +88,4 @@ const Navbar = ({ name, onSignin, onSignout, sessionStatus }: AppbarProps) => {
   );
 };
 
-export default Navbar;
+export default BaseNavbar;
