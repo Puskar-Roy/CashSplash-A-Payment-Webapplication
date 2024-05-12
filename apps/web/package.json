@@ -9,8 +9,8 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@repo/database": "*",
     "@repo/store": "*",
+    "@repo/database":"*",
     "@repo/ui": "*",
     "bcrypt": "^5.1.1",
     "next": "^14.1.1",
