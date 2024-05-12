@@ -1,6 +1,9 @@
 {
   "name": "@repo/database",
   "version": "1.0.0",
+  "scripts": {
+    "build": "prisma generate"
+  },
   "author": "",
   "license": "ISC",
   "description": "",
@@ -9,9 +12,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.13.0"
-  }
-  ,
-  "exports":{
-    "./client":"./index.ts"
+  },
+  "exports": {
+    "./client": "./index.ts"
   }
 }
