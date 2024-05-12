@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import BaseNavbar from "@repo/ui/navbar";
+import BaseNavbar from "./baseNavbar";
 
 
 const Navbar = () => {
