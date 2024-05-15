@@ -14,8 +14,7 @@ enum OnRampStatus {
 interface IUser extends Document {
   email?: string;
   name?: string;
-  number: string;
-  password: string;
+  image: string;
   onRampTransactions: mongoose.Types.ObjectId[];
   balances: mongoose.Types.ObjectId[];
 }
@@ -23,8 +22,7 @@ interface IUser extends Document {
 const UserSchema: Schema<IUser> = new Schema({
   email: { type: String, unique: true, sparse: true },
   name: { type: String },
-  number: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
+  image: { type: String, unique: true, required: true },
   onRampTransactions: [
     { type: mongoose.Schema.Types.ObjectId, ref: "OnRampTransaction" },
   ],
@@ -78,20 +76,21 @@ const BalanceSchema: Schema<IBalance> = new Schema({
   locked: { type: Number, required: true },
 });
 
-const UserModel: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
-const MerchantModel: Model<IMerchant> = mongoose.model<IMerchant>(
-  "Merchant",
-  MerchantSchema
-);
+const UserModel: Model<IUser> =
+  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+
+const MerchantModel: Model<IMerchant> =
+  mongoose.models.Merchant ||
+  mongoose.model<IMerchant>("Merchant", MerchantSchema);
+
 const OnRampTransactionModel: Model<IOnRampTransaction> =
+  mongoose.models.OnRampTransaction ||
   mongoose.model<IOnRampTransaction>(
     "OnRampTransaction",
     OnRampTransactionSchema
   );
-const BalanceModel: Model<IBalance> = mongoose.model<IBalance>(
-  "Balance",
-  BalanceSchema
-);
+const BalanceModel: Model<IBalance> =
+  mongoose.models.Balance || mongoose.model<IBalance>("Balance", BalanceSchema);
 
 export {
   UserModel,
