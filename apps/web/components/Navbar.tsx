@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <div className="overflow-hidde shadow">
       <BaseNavbar
-        onSignin={signIn}
+        onSignin={()=>{signIn('google')}}
         onSignout={signOut}
         sessionStatus={session.status}
         key={session.data?.user?.email}

@@ -1,77 +1,38 @@
-import db from "@repo/database/client";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
-
+import GoogleProvider from "next-auth/providers/google";
+import { UserModel } from "../model/model";
+import connect from "../utils/db";
+import { SignInParams } from "../interface";
 export const authOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        phone: {
-          label: "Phone number",
-          type: "text",
-          placeholder: "+91 9132566565",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      // TODO: User credentials type from next-aut
-      async authorize(credentials: any) {
-        // Do zod validation, OTP validation here
-        const hashedPassword = await bcrypt.hash(credentials.password, 10);
-        const existingUser = await db.user.findFirst({
-          where: {
-            number: credentials.phone,
-          },
-        });
-
-        console.log(existingUser);
-        
-
-        if (existingUser) {
-          const passwordValidation = await bcrypt.compare(
-            credentials.password,
-            existingUser.password
-          );
-          if (passwordValidation) {
-            return {
-              id: existingUser.id.toString(),
-              name: existingUser.name,
-              email: existingUser.number,
-            };
-          }
-          return null;
-        }
-
-        try {
-          const user = await db.user.create({
-            data: {
-              number: credentials.phone,
-              password: hashedPassword,
-            },
-          });
-          console.log(user);
-          
-
-          return {
-            id: user.id.toString(),
-            name: user.name,
-            email: user.number,
-          };
-        } catch (e) {
-          console.error(e);
-        }
-
-        return null;
-      },
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
-  secret: process.env.JWT_SECRET || "secret",
   callbacks: {
-    // TODO: can u fix the type here? Using any is bad
-    async session({ token, session }: any) {
-      session.user.id = token.sub;
+    async signIn(params:SignInParams) {
+      const { user, account } = params;
+      if (account?.provider == "google") {
+        await connect();
 
-      return session;
+        try {
+          const existingUser = await UserModel.findOne({ email: user.email });
+          if (!existingUser) {
+            const newUser = new UserModel({
+              email: user.email,
+              name: user.name,
+              image: user.image,
+            });
+
+            await newUser.save();
+            return true;
+          }
+          return true;
+        } catch (e) {
+          console.log("Error saving user", e);
+          return false;
+        }
+      }
     },
   },
 };
