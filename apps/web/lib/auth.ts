@@ -1,6 +1,7 @@
 import db from "@repo/database/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import { UserModel } from "../model/model";
 
 export const authOptions = {
   providers: [
@@ -18,14 +19,11 @@ export const authOptions = {
       async authorize(credentials: any) {
         // Do zod validation, OTP validation here
         const hashedPassword = await bcrypt.hash(credentials.password, 10);
-        const existingUser = await db.user.findFirst({
-          where: {
-            number: credentials.phone,
-          },
+        const existingUser = await UserModel.findOne({
+          number: credentials.phone,
         });
 
         console.log(existingUser);
-        
 
         if (existingUser) {
           const passwordValidation = await bcrypt.compare(
@@ -34,26 +32,25 @@ export const authOptions = {
           );
           if (passwordValidation) {
             return {
-              id: existingUser.id.toString(),
+              id: existingUser._id,
               name: existingUser.name,
-              email: existingUser.number,
+              email: existingUser.email,
             };
           }
           return null;
         }
 
         try {
-          const user = await db.user.create({
-            data: {
-              number: credentials.phone,
-              password: hashedPassword,
-            },
+          const user = await UserModel.create({
+            email: credentials.email,
+            name: credentials.name,
+            number: credentials.phone,
+            password: hashedPassword,
           });
           console.log(user);
-          
 
           return {
-            id: user.id.toString(),
+            id: user._id,
             name: user.name,
             email: user.number,
           };
