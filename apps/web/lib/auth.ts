@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import GoogleProvider from "next-auth/providers/google";
 import { UserModel } from "../model/model";
 import connect from "../utils/db";

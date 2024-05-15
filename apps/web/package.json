@@ -9,7 +9,6 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@repo/database": "*",
     "@repo/store": "*",
     "@repo/ui": "*",
     "@types/mongoose": "^5.11.97",
