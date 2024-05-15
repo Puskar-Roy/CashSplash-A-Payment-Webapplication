@@ -9,6 +9,8 @@ const app:Express = express();
 app.use(express.json());
 app.use(helmet);
 
+
+import "./database/connectDb";
 app.use("/api/v0.1/transaction", paymentRoutes);
 app.use(errorHandler);
 app.get("/", (req: Request, res: Response) => {

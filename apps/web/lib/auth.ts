@@ -24,6 +24,9 @@ export const authOptions = {
           },
         });
 
+        console.log(existingUser);
+        
+
         if (existingUser) {
           const passwordValidation = await bcrypt.compare(
             credentials.password,
@@ -46,6 +49,8 @@ export const authOptions = {
               password: hashedPassword,
             },
           });
+          console.log(user);
+          
 
           return {
             id: user.id.toString(),

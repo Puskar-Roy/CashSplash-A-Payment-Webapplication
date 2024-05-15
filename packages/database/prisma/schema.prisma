@@ -4,14 +4,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 
 
 model User {
-  id          Int      @id @default(autoincrement())
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   email       String?  @unique
   name        String? 
   number      String  @unique
@@ -21,7 +21,7 @@ model User {
 }
 
 model Merchant {
-  id          Int     @id @default(autoincrement())
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   email       String  @unique
   name        String?
   auth_type   AuthType   
@@ -34,20 +34,20 @@ enum AuthType {
 
 
 model OnRampTransaction {
-  id        Int          @id @default(autoincrement())
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   status    OnRampStatus
   token     String       @unique
   provider  String
   amount    Int
   startTime DateTime
-  userId    Int
+  userId    String        @db.ObjectId
   user      User         @relation(fields: [userId], references: [id])
 }
 
 model Balance {
-  id     Int  @id @default(autoincrement())
-  userId Int  @unique
-  amount Int
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId String  @unique      @db.ObjectId
+  amount Int 
   locked Int
   user   User @relation(fields: [userId], references: [id])
 }
