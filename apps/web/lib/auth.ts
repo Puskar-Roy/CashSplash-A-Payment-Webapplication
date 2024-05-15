@@ -1,7 +1,7 @@
 import GoogleProvider from "next-auth/providers/google";
 import { UserModel } from "../model/model";
 import connect from "../utils/db";
-
+import { SignInParams } from "../interface";
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -10,7 +10,7 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn(params: { user: any; account: any }) {
+    async signIn(params:SignInParams) {
       const { user, account } = params;
       if (account?.provider == "google") {
         await connect();
@@ -28,57 +28,11 @@ export const authOptions = {
             return true;
           }
           return true;
-        }catch(e){
+        } catch (e) {
           console.log("Error saving user", e);
           return false;
-          
         }
       }
     },
   },
 };
-
-// async authorize(credentials: any) {
-//   // Do zod validation, OTP validation here
-//   const hashedPassword = await bcrypt.hash(credentials.password, 10);
-//   const existingUser = await UserModel.findOne({
-//     number: credentials.phone,
-//   });
-
-//   console.log(existingUser);
-
-//   if (existingUser) {
-//     const passwordValidation = await bcrypt.compare(
-//       credentials.password,
-//       existingUser.password
-//     );
-//     if (passwordValidation) {
-//       return {
-//         id: existingUser._id,
-//         name: existingUser.name,
-//         email: existingUser.email,
-//       };
-//     }
-//     return null;
-//   }
-
-//   try {
-//     const user = await UserModel.create({
-//       email: credentials.email,
-//       name: credentials.name,
-//       number: credentials.phone,
-//       password: hashedPassword,
-//     });
-//     console.log(user);
-
-//     return {
-//       id: user._id,
-//       name: user.name,
-//       email: user.number,
-//     };
-//   } catch (e) {
-//     console.error(e);
-//   }
-
-//   return null;
-// },
